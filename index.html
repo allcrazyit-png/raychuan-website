@@ -1440,7 +1440,7 @@
   const lb = document.getElementById('lightbox');
   const lbImg = document.getElementById('lightbox-img');
   const lbCap = document.getElementById('lightbox-caption');
-  document.querySelectorAll('img:not(.no-lb)').forEach(img => {
+  document.querySelectorAll('.pcard img').forEach(img => {
     img.classList.add('lb-trigger');
     img.addEventListener('click', () => {
       lbImg.src = img.src;
