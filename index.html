@@ -878,6 +878,48 @@
     .hero-cta { flex-direction: column; }
     .btn-primary, .btn-outline { text-align: center; }
   }
+
+  /* Lightbox */
+  #lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.88);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img {
+    max-width: 92vw;
+    max-height: 88vh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 8px 40px rgba(0,0,0,.6);
+    cursor: default;
+  }
+  #lightbox-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    color: #fff;
+    cursor: pointer;
+    line-height: 1;
+    user-select: none;
+  }
+  #lightbox-caption {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 0; right: 0;
+    text-align: center;
+    color: rgba(255,255,255,.75);
+    font-size: .9rem;
+  }
+  .lb-trigger {
+    cursor: zoom-in;
+  }
 </style>
 </head>
 <body>
@@ -956,7 +998,7 @@
         <div class="section-line"></div>
         <p>瑞全企業股份有限公司創立於1976年，前身為瑞盛塑膠廠，自創立以來專注於塑膠射出成型領域，從傳統製造走向服務導向的精密工藝，持續深耕超過四十年。</p>
         <p>我們以「服務導向之製造業」為核心理念，透過製程改善降低成本、品質嚴格把關，為汽機車產業及各行業提供一站式整合服務，從模具維護到末端組裝，一手包辦。</p>
-        <p>1999年通過ISO-9002認證，並持續引入自動化機械手臂與IoT數位管理系統，以智慧製造確保品質一致性與生產效率。</p>
+        <p>1999年通過ISO-9001認證，並持續引入自動化機械手臂與IoT數位管理系統，以智慧製造確保品質一致性與生產效率。</p>
         <div class="about-specs">
           <div class="spec-item">
             <div class="spec-label">創立年份</div>
@@ -964,7 +1006,7 @@
           </div>
           <div class="spec-item">
             <div class="spec-label">品質認證</div>
-            <div class="spec-value">ISO-9002</div>
+            <div class="spec-value">ISO-9001</div>
           </div>
           <div class="spec-item">
             <div class="spec-label">廠區面積</div>
@@ -1006,7 +1048,7 @@
       </div>
       <div class="tl-item reveal reveal-d2">
         <div class="tl-year">1999</div>
-        <div class="tl-desc"><strong>通過 ISO-9002 認證</strong>建立國際品質管理體系，品質保證有憑有據</div>
+        <div class="tl-desc"><strong>通過 ISO-9001 認證</strong>建立國際品質管理體系，品質保證有憑有據</div>
       </div>
       <div class="tl-item highlight reveal reveal-d3">
         <div class="tl-year">2000</div>
@@ -1346,6 +1388,13 @@
 </footer>
 
 <!-- BACK TO TOP -->
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true">
+  <span id="lightbox-close" aria-label="關閉">✕</span>
+  <img id="lightbox-img" src="" alt="">
+  <div id="lightbox-caption"></div>
+</div>
+
 <a class="back-top" id="back-top" href="#" aria-label="回到頂部">↑</a>
 
 <script>
@@ -1386,6 +1435,29 @@
       card.classList.toggle('hidden', cat !== 'all' && card.dataset.cat !== cat);
     });
   }
+
+  // Lightbox
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbCap = document.getElementById('lightbox-caption');
+  document.querySelectorAll('img:not(.no-lb)').forEach(img => {
+    img.classList.add('lb-trigger');
+    img.addEventListener('click', () => {
+      lbImg.src = img.src;
+      lbCap.textContent = img.alt || '';
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  function closeLb() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+  lb.addEventListener('click', closeLb);
+  lbImg.addEventListener('click', e => e.stopPropagation());
+  document.getElementById('lightbox-close').addEventListener('click', closeLb);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
 </script>
 </body>
 </html>
